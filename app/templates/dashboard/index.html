@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Makkawi Smart{% endblock %}
+
+{% block body %}
+<div class="mk-dashboard">
+    <!-- ═══ Sidebar ══════════════════════════════════════════════════════════ -->
+    <aside class="mk-sidebar" id="sidebar">
+        <div class="mk-sidebar-brand">
+            <div class="brand-icon">
+                <i class="bi bi-hdd-network"></i>
+            </div>
+            <span>Makkawi Smart</span>
+        </div>
+
+        <div class="mk-sidebar-section">Main</div>
+        <ul class="mk-sidebar-nav">
+            <li>
+                <a href="/dashboard" class="active">
+                    <i class="bi bi-grid-1x2"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-hdd-rack"></i> Routers
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-people"></i> Users
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-activity"></i> Monitoring
+                </a>
+            </li>
+        </ul>
+
+        <div class="mk-sidebar-section">Network</div>
+        <ul class="mk-sidebar-nav">
+            <li>
+                <a href="#">
+                    <i class="bi bi-diagram-3"></i> Topology
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-shield-check"></i> Firewall
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-speedometer"></i> Bandwidth
+                </a>
+            </li>
+        </ul>
+
+        <div class="mk-sidebar-section">System</div>
+        <ul class="mk-sidebar-nav">
+            <li>
+                <a href="#">
+                    <i class="bi bi-gear"></i> Settings
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="bi bi-file-earmark-text"></i> Logs
+                </a>
+            </li>
+            <li>
+                <a href="/auth/logout">
+                    <i class="bi bi-box-arrow-left"></i> Logout
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- ═══ Main Content ═════════════════════════════════════════════════════ -->
+    <main class="mk-main-content">
+        <!-- Top Bar -->
+        <div class="mk-topbar">
+            <div>
+                <button class="btn d-lg-none me-2" onclick="document.getElementById('sidebar').classList.toggle('show')">
+                    <i class="bi bi-list text-white fs-4"></i>
+                </button>
+                <h1 style="display: inline;">Dashboard</h1>
+            </div>
+            <div class="mk-user-badge">
+                <div class="mk-user-avatar">
+                    {{ user.full_name[0] | upper }}
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; font-weight: 600;">{{ user.full_name }}</div>
+                    <div style="font-size: 0.7rem; color: var(--mk-text-muted);">{{ user.role.value | title }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="row g-4 mb-4">
+            <div class="col-sm-6 col-xl-3">
+                <div class="mk-stat-card">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span style="font-size: 0.8rem; color: var(--mk-text-secondary);">Total Routers</span>
+                        <i class="bi bi-hdd-rack" style="color: var(--mk-accent);"></i>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 800;">0</div>
+                    <div style="font-size: 0.75rem; color: var(--mk-text-muted);">No routers added yet</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="mk-stat-card">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span style="font-size: 0.8rem; color: var(--mk-text-secondary);">Online</span>
+                        <i class="bi bi-wifi" style="color: var(--mk-success);"></i>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: var(--mk-success);">0</div>
+                    <div style="font-size: 0.75rem; color: var(--mk-text-muted);">Connected routers</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="mk-stat-card">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span style="font-size: 0.8rem; color: var(--mk-text-secondary);">Offline</span>
+                        <i class="bi bi-wifi-off" style="color: var(--mk-danger);"></i>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 800; color: var(--mk-danger);">0</div>
+                    <div style="font-size: 0.75rem; color: var(--mk-text-muted);">Disconnected routers</div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-3">
+                <div class="mk-stat-card">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span style="font-size: 0.8rem; color: var(--mk-text-secondary);">Active Users</span>
+                        <i class="bi bi-person-check" style="color: var(--mk-warning);"></i>
+                    </div>
+                    <div style="font-size: 1.8rem; font-weight: 800;">0</div>
+                    <div style="font-size: 0.75rem; color: var(--mk-text-muted);">PPPoE / Hotspot users</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Card -->
+        <div class="mk-stat-card" style="border-left: 3px solid var(--mk-accent);">
+            <div class="d-flex align-items-start gap-3">
+                <div style="font-size: 2rem; color: var(--mk-accent);">
+                    <i class="bi bi-rocket-takeoff"></i>
+                </div>
+                <div>
+                    <h4 style="font-weight: 700; margin-bottom: 0.5rem;">Welcome to Makkawi Smart, {{ user.full_name }}!</h4>
+                    <p style="color: var(--mk-text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">
+                        Your dashboard is ready. Start by adding your first MikroTik router to begin 
+                        monitoring and managing your network infrastructure.
+                    </p>
+                    <a href="#" class="mk-btn-primary" style="font-size: 0.85rem; padding: 0.5rem 1.2rem;">
+                        <i class="bi bi-plus-circle"></i> Add Router
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Close sidebar on mobile when clicking outside
+    document.addEventListener('click', function(e) {
+        const sidebar = document.getElementById('sidebar');
+        if (window.innerWidth < 992 && sidebar.classList.contains('show')) {
+            if (!sidebar.contains(e.target) && !e.target.closest('[onclick]')) {
+                sidebar.classList.remove('show');
+            }
+        }
+    });
+</script>
+{% endblock %}

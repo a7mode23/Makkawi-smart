@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Register - Makkawi Smart{% endblock %}
+
+{% block body %}
+<div class="mk-auth-wrapper">
+    <div class="mk-auth-card">
+        <!-- Brand -->
+        <div class="text-center mb-4">
+            <a href="/" class="mk-brand justify-content-center mb-3" style="text-decoration: none;">
+                <div class="brand-icon">
+                    <i class="bi bi-hdd-network"></i>
+                </div>
+                Makkawi Smart
+            </a>
+        </div>
+
+        <h2 class="text-center">Create Account</h2>
+        <p class="subtitle text-center">Join Makkawi Smart to manage your network</p>
+
+        <!-- Alerts -->
+        {% if error %}
+        <div class="mk-alert mk-alert-error">
+            <i class="bi bi-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Register Form -->
+        <form method="POST" action="/auth/register">
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" class="form-control mk-form-control" 
+                       placeholder="Your full name" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control mk-form-control" 
+                       placeholder="Choose a username" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control mk-form-control" 
+                       placeholder="you@example.com" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control mk-form-control" 
+                       placeholder="Min 6 characters" required minlength="6">
+            </div>
+            <button type="submit" class="mk-btn-primary w-100 justify-content-center">
+                <i class="bi bi-person-plus"></i> Create Account
+            </button>
+        </form>
+
+        <div class="text-center mt-4">
+            <span style="color: var(--mk-text-muted); font-size: 0.85rem;">
+                Already have an account? 
+                <a href="/auth/login" style="color: var(--mk-accent); text-decoration: none; font-weight: 500;">Sign In</a>
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}

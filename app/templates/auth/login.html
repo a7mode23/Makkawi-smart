@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Login - Makkawi Smart{% endblock %}
+
+{% block body %}
+<div class="mk-auth-wrapper">
+    <div class="mk-auth-card">
+        <!-- Brand -->
+        <div class="text-center mb-4">
+            <a href="/" class="mk-brand justify-content-center mb-3" style="text-decoration: none;">
+                <div class="brand-icon">
+                    <i class="bi bi-hdd-network"></i>
+                </div>
+                Makkawi Smart
+            </a>
+        </div>
+
+        <h2 class="text-center">Welcome Back</h2>
+        <p class="subtitle text-center">Sign in to your account to continue</p>
+
+        <!-- Alerts -->
+        {% if error %}
+        <div class="mk-alert mk-alert-error">
+            <i class="bi bi-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endif %}
+        {% if success %}
+        <div class="mk-alert mk-alert-success">
+            <i class="bi bi-check-circle"></i> {{ success }}
+        </div>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form method="POST" action="/auth/login">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control mk-form-control" 
+                       placeholder="Enter your username" required autofocus>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control mk-form-control" 
+                       placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="mk-btn-primary w-100 justify-content-center">
+                <i class="bi bi-box-arrow-in-right"></i> Sign In
+            </button>
+        </form>
+
+        <div class="text-center mt-4">
+            <span style="color: var(--mk-text-muted); font-size: 0.85rem;">
+                Don't have an account? 
+                <a href="/auth/register" style="color: var(--mk-accent); text-decoration: none; font-weight: 500;">Register</a>
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}
