@@ -79,6 +79,9 @@ ROUTER_PROBE_TIMEOUT = 2.5  # seconds for the live TCP reachability probe
 ROUTER_PROBE_PORTS = (80, 443)
 STATUS_POLL_INTERVAL = 6    # seconds between automatic connectivity checks
 
+# PRODUCTION: point this at the HTTPS endpoint once the server has TLS
+# (see SERVER_SETUP.md). requests verifies the certificate automatically
+# via certifi, which is already in the Android requirements list.
 CLOUD_API_URL = "http://167.233.202.51:8000/routers/"
 CLOUD_TIMEOUT = 20          # seconds
 
@@ -112,6 +115,7 @@ TEXTS = {
 
     "cloud_section": "حساب المنصة السحابية",
     "cloud_user_hint": "اسم مستخدم حساب مكاوي (مثال: user@mk.com)",
+    "cloud_pass_hint": "كلمة مرور حساب مكاوي",
     "alias_hint": "اسم الراوتر / اللقب (مثال: راوتر المنزل)",
 
     "router_section": "بيانات دخول الراوتر المحلي",
@@ -144,7 +148,12 @@ TEXTS = {
         "ملصق الراوتر ثم أعد المحاولة."
     ),
     "err_missing_fields": (
-        "يرجى تعبئة اسم مستخدم حساب مكاوي واسم الراوتر قبل المتابعة."
+        "يرجى تعبئة اسم مستخدم حساب مكاوي وكلمة المرور واسم الراوتر "
+        "قبل المتابعة."
+    ),
+    "err_cloud_auth": (
+        "اسم مستخدم أو كلمة مرور حساب مكاوي غير صحيحة. تحقق من بيانات "
+        "حسابك في منصة مكاوي سمارت ثم أعد المحاولة."
     ),
     "err_not_connected": (
         "لم يتم العثور على راوتر مكروتك. يرجى الاتصال بشبكة الواي فاي "
@@ -393,6 +402,10 @@ class CloudUnreachable(CloudError):
     """Cloud server timed out or is offline."""
 
 
+class CloudAuthError(CloudError):
+    """401/403 — Makkawi account credentials rejected."""
+
+
 class CloudScriptMissing(CloudError):
     """Cloud registered the router but returned no provisioning script."""
 
@@ -427,10 +440,14 @@ def _extract_script(data):
     return None
 
 
-def register_router_on_cloud(account, alias, ip_address, serial):
+def register_router_on_cloud(account, password, alias, ip_address, serial):
     """
     Step B — POST the router to the Makkawi Smart Cloud API and return the
     generated WireGuard provisioning script.
+
+    The account credentials travel both in the JSON payload and as HTTP
+    Basic auth, so the backend can enforce authentication with either
+    mechanism (see SERVER_SETUP.md for the FastAPI side).
 
     NOTE: field names below match a typical FastAPI /routers/ schema —
     adjust "account" / "serial_number" here if the backend schema differs.
@@ -440,13 +457,17 @@ def register_router_on_cloud(account, alias, ip_address, serial):
         "ip_address": ip_address,
         "serial_number": serial,
         "account": account,
+        "password": password,
     }
     try:
         resp = requests.post(CLOUD_API_URL, json=payload,
+                             auth=(account, password),
                              timeout=CLOUD_TIMEOUT)
     except requests.exceptions.RequestException as exc:
         raise CloudUnreachable(str(exc))
 
+    if resp.status_code in (401, 403):
+        raise CloudAuthError(f"HTTP {resp.status_code}")
     if resp.status_code >= 400:
         raise CloudError(f"HTTP {resp.status_code}: {resp.text[:200]}")
 
@@ -613,6 +634,14 @@ MDScreen:
                     hint_text: app.tr('cloud_user_hint')
                     mode: "rectangle"
                     halign: "right"
+                    write_tab: False
+
+                MDTextField:
+                    id: cloud_pass
+                    hint_text: app.tr('cloud_pass_hint')
+                    mode: "rectangle"
+                    halign: "right"
+                    password: True
                     write_tab: False
 
                 MDTextField:
@@ -851,11 +880,12 @@ class MakkawiConnectorApp(MDApp):
 
         ids = self.root.ids
         account = ids.cloud_user.text.strip()
+        cloud_pass = ids.cloud_pass.text
         alias = ids.alias.text.strip()
         mik_user = ids.mik_user.text.strip() or "admin"
         mik_pass = ids.mik_pass.text
 
-        if not account or not alias:
+        if not account or not cloud_pass or not alias:
             self.show_dialog("err_title", "err_missing_fields")
             return
         if not self.router_connected:
@@ -866,11 +896,12 @@ class MakkawiConnectorApp(MDApp):
         self.reset_steps()
         threading.Thread(
             target=self._activation_worker,
-            args=(account, alias, mik_user, mik_pass),
+            args=(account, cloud_pass, alias, mik_user, mik_pass),
             daemon=True,
         ).start()
 
-    def _activation_worker(self, account, alias, mik_user, mik_pass):
+    def _activation_worker(self, account, cloud_pass, alias,
+                           mik_user, mik_pass):
         client = MikrotikClient(username=mik_user, password=mik_pass)
 
         # ---- Step A: hardware serial ------------------------------------
@@ -898,8 +929,12 @@ class MakkawiConnectorApp(MDApp):
         self.set_step("step_cloud", "running")
         try:
             script = register_router_on_cloud(
-                account, alias, get_local_ip(), serial,
+                account, cloud_pass, alias, get_local_ip(), serial,
             )
+        except CloudAuthError:
+            self.set_step("step_cloud", "error")
+            self._finish(dialog=("err_title", "err_cloud_auth", True))
+            return
         except CloudUnreachable:
             self.set_step("step_cloud", "error")
             self._finish(dialog=("err_title", "err_cloud_unreachable", True))
