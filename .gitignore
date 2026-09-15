@@ -1,0 +1,21 @@
+# أسرار وإعدادات محلية — لا تُرفع أبدًا
+ops/inventory.local.env
+ops/*.local.*
+docs/ops/*.local.md
+
+# النسخ الاحتياطية (تحتوي بيانات دخول الراوترات)
+backups/
+*.tar.gz
+*.tar.gz.sha256
+.wasel-backup-meta.yml
+
+# ملاحظة: voucher/temp.php متتبَّع أصلاً في المستودع (ملف مؤقت لآخر كروت مولّدة)
+# لتجاهل تغييراته محليًا على السيرفر:  git update-index --skip-worktree voucher/temp.php
+
+# ملفات النظام والمحررات
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
