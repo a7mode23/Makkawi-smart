@@ -133,8 +133,16 @@ process/psecret.php  process/removepprofile.php  process/makebinding.php
 hotspot/binding.php  report/export.php  include/info.php
 ```
 
-**الأثر:** كل قسم **PPP** في القائمة معطّل، وتصدير التقارير معطّل، وربط MAC
-(`makebinding`) معطّل. إذا احتاج العميل هذه الميزات → تُجلب من المشروع الأصلي
+**الأثر الدقيق:**
+- **PPP**: القائمة الجانبية (`include/menu.php`) **لا تعرض روابط PPP أصلاً** (صفر رابط
+  `ppp=`)، رغم أن `index.php` فيه 27 إشارة لمسارات PPP وأن `lang/en.php` فيه
+  تسميات `$_ppp_secrets` و `$_ppp_profiles` و `$_ppp_active`. يعني القسم غير مرئي،
+  ولو فتحته يدويًا بـ `?ppp=secrets` بيطلع فاضي بصمت.
+- **تصدير التقارير** (`report/export.php`) و **ربط MAC** (`process/makebinding.php`)
+  و `hotspot/binding.php`: مربوطة بالكود لكن الملفات مفقودة → نتيجة فارغة بصمت.
+- `include/info.php`: إشعار التحديثات من المشروع الأصلي — مفقود، بلا أثر تشغيلي.
+
+إذا احتاج العميل هذه الميزات → تُجلب من المشروع الأصلي
 (`laksa19/mikhmonv3` v3.20) مع مراجعة أمنية، لا تُكتب من الصفر.
 
 ## 8. المختبر التجريبي (للاختبار قبل الإنتاج)
