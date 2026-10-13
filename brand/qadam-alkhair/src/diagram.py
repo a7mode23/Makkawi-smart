@@ -5,21 +5,21 @@ from build import C, MARK_INK
 from textpath import shape_to_path
 
 W, H = 840, 430
-S = 300 / (MARK_INK[3] - MARK_INK[1])          # mark height 300
-MX, MY = 58, 64
+S = 250 / (MARK_INK[3] - MARK_INK[1])          # mark height 250
+MX, MY = 70, 90
 LABEL_RIGHT = W - 40
 
 def to_canvas(x, y):
     return MX + (x - MARK_INK[0]) * S, MY + (y - MARK_INK[1]) * S
 
 ITEMS = [
-    ((54.0, 68.0),   "حلقة Q · كأس حرف ق", 86),
-    ((99.9, 88.0),   "قلب · الخير الذي يُعطى", 176),
-    ((93.3, 131.0),  "يد تمتدّ وتُعطي", 266),
-    ((143.0, 161.0), "ورقة · ذيل Q", 356),
+    ((53.8, 57.8),   "حلقة Q · كأس حرف ق", 86),
+    ((87.3, 93.7),   "كفّ ممدودة تُعطي", 176),
+    ((112.4, 114.1), "قلب · الخير", 266),
+    ((145.2, 149.2), "الذراع نفسها ذيل Q", 356),
 ]
 
-defs, body = B.mark("d1", None, C["gold"], tail_fill=C["green"],
+defs, body = B.mark("d1", None, C["gold"],
                     gradient=(C["green_lt"], C["green_dk"]))
 parts = [f'<g transform="translate({MX - MARK_INK[0]*S:.2f} {MY - MARK_INK[1]*S:.2f}) '
          f'scale({S:.5f})">{body}</g>']

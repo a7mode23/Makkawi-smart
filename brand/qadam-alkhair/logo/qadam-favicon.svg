@@ -2,9 +2,8 @@
 <title>قدم الخير — Qadam Alkhair</title>
 <defs>
 <linearGradient id="gf1" x1="24" y1="40" x2="168" y2="180" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#159A6F"/><stop offset="1" stop-color="#0A5440"/></linearGradient>
-<mask id="mf1" maskUnits="userSpaceOnUse" x="-40" y="-40" width="300" height="300"><rect x="-40" y="-40" width="300" height="300" fill="#fff"/><g transform="matrix(0.70711 0.70711 0.70711 -0.70711 124 140)"><path d="M58,0 C45,6.4 27,10 6,10 C-4.2,10 -9.5,5.6 -9.5,0 C-9.5,-5.6 -4.2,-10 6,-10 C27,-10 45,-6.4 58,0 Z" fill="#000" stroke="#000" stroke-width="9" stroke-linejoin="round"/></g></mask>
-<mask id="tf1" maskUnits="userSpaceOnUse" x="-40" y="-40" width="300" height="300"><rect x="-40" y="-40" width="300" height="300" fill="#fff"/></mask>
+<mask id="mf1" maskUnits="userSpaceOnUse" x="-60" y="-60" width="320" height="320"><rect x="-60" y="-60" width="320" height="320" fill="#fff"/><path d="M126,128 L157.11284,159.11284" stroke="#000" stroke-width="32.0" stroke-linecap="round" fill="none"/></mask>
 </defs>
 
-<g transform="translate(-7.25 -13.57) scale(0.39544)"><g transform="translate(-2 0)"><circle cx="100" cy="112" r="52" fill="none" stroke="url(#gf1)" stroke-width="21" mask="url(#mf1)"/><g mask="url(#tf1)" transform="matrix(0.70711 0.70711 0.70711 -0.70711 124 140)"><path d="M58,0 C45,6.4 27,10 6,10 C-4.2,10 -9.5,5.6 -9.5,0 C-9.5,-5.6 -4.2,-10 6,-10 C27,-10 45,-6.4 58,0 Z" fill="#0F7B5A"/></g><g transform="translate(98 112) scale(1.3) translate(-60 -7)"><g transform="translate(60 12) scale(0.95)"><path d="M0,15 C-16,4 -22,-5 -22,-13 C-22,-21 -16,-26 -9,-26 C-4.5,-26 -1,-23 0,-19.5 C1,-23 4.5,-26 9,-26 C16,-26 22,-21 22,-13 C22,-5 16,4 0,15 Z" fill="#E3A42B"/></g></g></g></g>
+<g transform="translate(-8.19 -9.79) scale(0.39969)"><g transform="translate(-2 0)"><circle cx="100" cy="102" r="52" fill="none" stroke="url(#gf1)" stroke-width="21" mask="url(#mf1)"/><path d="M126,128 L157.11284,159.11284" stroke="url(#gf1)" stroke-width="21" stroke-linecap="round" fill="none"/><g transform="translate(98 102) scale(1.45) translate(-48 -57)"><g transform="translate(48 57) scale(1.0)"><path d="M0,15 C-16,4 -22,-5 -22,-13 C-22,-21 -16,-26 -9,-26 C-4.5,-26 -1,-23 0,-19.5 C1,-23 4.5,-26 9,-26 C16,-26 22,-21 22,-13 C22,-5 16,4 0,15 Z" fill="#E3A42B"/></g></g></g></g>
 </svg>
