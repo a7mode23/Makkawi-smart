@@ -68,21 +68,39 @@ def _open(uid, ring_fill, gradient):
 
 
 # ------------------------------------------------------------ the mark -------
-def mark(uid, ring_fill, hand_fill, heart_fill, gradient=None):
-    """Primary: an open hand offering a heart, inside the Q."""
+def _cap(x1, y1, x2, y2, w, fill):
+    return (f'<path d="M{x1},{y1} L{x2},{y2}" stroke="{fill}" stroke-width="{w}" '
+            f'stroke-linecap="round" fill="none"/>')
+
+
+def mark(uid, ring_fill, hand_fill, heart_fill=None, gradient=None, hand=True):
+    """Primary: an open hand carrying a heart in its palm, inside the Q.
+
+    The heart is knocked out of the hand, so it reads on any background and in
+    one colour. `hand=False` gives the simplified small-size mark (heart only).
+    """
     defs, ring_fill = _open(uid, ring_fill, gradient)
     defs.append(_tail_mask(uid))
-    k = INNER
-    hand = (f'<path d="M66,122 C66,143 82,154 100,154 C118,154 134,143 134,122" fill="none" '
-            f'stroke="{hand_fill}" stroke-width="14" stroke-linecap="round"/>'
-            f'<path d="M66,122 C58,112 60,102 68,99" fill="none" stroke="{hand_fill}" '
-            f'stroke-width="14" stroke-linecap="round"/>')
-    heart = (f'<g transform="translate(101 93) scale(0.95)">'
-             f'<path d="{HEART}" fill="{heart_fill}"/></g>')
-    inner = (f'<g transform="translate(100 118) scale({k}) translate(-100 -118)">{hand}{heart}</g>')
-    body = (f'<g transform="{SHIFT}">{_ring(uid, ring_fill)}{inner}'
-            f'{_tail(hand_fill)}</g>')
-    return "\n".join(defs), body
+    heart_at = ('<g transform="translate(48 57) scale({s})">'
+                '<path d="' + HEART + '" fill="{f}"/></g>')
+    if hand:
+        fingers = "".join(_cap(x, 52, x, top, 13, hand_fill) for x, top in
+                          [(26, 16), (41, 6), (56, 11), (71, 24)])
+        palm = f'<rect x="19" y="34" width="59" height="46" rx="20" fill="{hand_fill}"/>'
+        thumb = _cap(26, 56, 6, 44, 13, hand_fill)
+        defs.append(
+            f'<mask id="p{uid}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="280" height="280">'
+            f'<rect x="-40" y="-40" width="280" height="280" fill="#fff"/>'
+            + heart_at.format(s=0.70, f="#000") + '</mask>')
+        inner = f'<g mask="url(#p{uid})">{fingers}{thumb}{palm}</g>'
+        if heart_fill:
+            inner += heart_at.format(s=0.58, f=heart_fill)
+        g = (f'<g transform="translate(98 112) rotate(-15) scale(0.70) translate(-48 -46)">'
+             f'{inner}</g>')
+    else:
+        g = (f'<g transform="translate(98 112) scale(1.25) translate(-48 -57)">'
+             + heart_at.format(s=1.0, f=hand_fill) + '</g>')
+    return "\n".join(defs), f'<g transform="{SHIFT}">{_ring(uid, ring_fill)}{g}{_tail(hand_fill)}</g>'
 
 
 # ------------------------------------------------------- alternate concepts ---

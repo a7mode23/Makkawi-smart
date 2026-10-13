@@ -8,16 +8,19 @@ from textpath import shape_to_path
 AR_TEXT, LA_TEXT = "قدم الخير", "QADAM ALKHAIR"
 
 def mark_variant(uid, style):
+    small = style.endswith("_small")
+    style = style[:-6] if small else style
+    kw = dict(hand=not small)
     if style == "color":
-        return B.mark(uid, None, C["gold"], C["gold"], (C["green_lt"], C["green_dk"]))
+        return B.mark(uid, None, C["gold"], gradient=(C["green_lt"], C["green_dk"]), **kw)
     if style == "on_dark":
-        return B.mark(uid, C["white"], C["gold_lt"], C["gold_lt"])
+        return B.mark(uid, C["white"], C["gold_lt"], **kw)
     if style == "mono_ink":
-        return B.mark(uid, C["ink"], C["ink"], C["ink"])
+        return B.mark(uid, C["ink"], C["ink"], **kw)
     if style == "mono_white":
-        return B.mark(uid, C["white"], C["white"], C["white"])
+        return B.mark(uid, C["white"], C["white"], **kw)
     if style == "mono_green":
-        return B.mark(uid, C["green"], C["green"], C["green"])
+        return B.mark(uid, C["green"], C["green"], **kw)
     raise ValueError(style)
 
 
@@ -117,7 +120,7 @@ def favicon(uid):
     """Tight-cropped mark for tiny sizes."""
     pad = 6
     s = (64 - 2 * pad) / (MARK_INK[3] - MARK_INK[1])
-    defs, body = mark_variant(uid, "color")
+    defs, body = mark_variant(uid, "color_small")
     w = (MARK_INK[2] - MARK_INK[0]) * s
     g = (f'<g transform="translate({(64 - w)/2 - MARK_INK[0]*s:.2f} {pad - MARK_INK[1]*s:.2f}) '
          f'scale({s:.5f})">{body}</g>')
