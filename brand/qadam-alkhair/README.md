@@ -1,42 +1,42 @@
 # قدم الخير — Qadam Alkhair · Logo & Brand Kit
 
-## الفكرة الأساسية · The core idea
+## الفكرة · The idea
 
-**نقطة «الخير» قلب.**
-في كلمة **الخير** نقطة واحدة (نقطة الخاء)، وفي **Alkhair** نقطة واحدة (نقطة الـ i).
-النقطتان صارتا **قلباً ذهبياً** في اللغتين وعلى نفس الكلمة. الاسم نفسه هو الشعار.
+**خطوات الخير.**
+قدمان تمشيان للأمام، والخطوة اللي في المقدّمة **ذهبية**: الخطوة اللي بتجيب الخير.
+«قدمه خير» = اللي بيجي معاه الخير والبركة، والشعار بيقول ده حرفياً.
 
-The single dot of «الخير» (on خ) and of «Alkhair» (on i) is a gold heart, in both scripts.
+- **الاتجاه:** الخطوات ماشية لفوق وناحية الشمال، يعني لقدّام في اتجاه قراءة العربي،
+  وبتمشي ناحية الاسم في النسخة الأفقية، فالشعار كله بيتحرك لقدّام.
+- **الألوان:** الخطوة الخلفية خضراء، والخطوة الأمامية ذهبية، والاسم أخضر غامق.
+- **الاسم:** خط El Messiri بالعربي والإنجليزي، محوّل لمسارات فما بيحتاج تثبيت أي خط.
+
+Two footsteps walking forward — up and to the left, the way Arabic reads, into
+the name. The leading step is gold: the step that brings the good.
 
 ---
 
-## الخيارات · The options
+## الملفات · Files
 
-كل خيار يطوّر الفكرة نفسها بإشارة خير إضافية واحدة، وله طقم ملفات كامل في `options/`.
-
-| المجلد | الخيار | المعنى |
-| --- | --- | --- |
-| `options/a-light/` | **أ — القلب يشعّ** | ثلاثة خطوط نور تخرج من القلب: «نور الخير» ينتشر |
-| `options/b-wheat/` | **ب — سنبلة وقلب** | لام «الخير» تطلع سنبلة قمح: رزق وبركة، والقلب: عطاء |
-| `options/c-cradle/` | **ج — حضن تحت الاسم** | ضربة ذهبية تحمل الاسم من تحت: يد تحمل الخير |
-| `options/d-kashida/` | **د — مدّ وإشعاع** | «الخيـر» ممدودة كأنها فاتحة يديها (كرم)، والقلب يشعّ فوقها |
-| `options/0-base/` | **الأساس** | القلب وحده مكان النقطة، بلا إضافة |
-
-### داخل كل مجلد
+### `logo/` — SVG (المصدر الأساسي، يكبر بلا حدود)
 
 | الملف | الاستخدام |
 | --- | --- |
-| `logo/qadam-logo.svg` | **الشعار الأساسي**: العربي فوق والإنجليزي تحت |
-| `logo/qadam-logo-horizontal.svg` | سطر واحد: الإنجليزي ┃ العربي، للهيدر والمساحات العريضة |
-| `logo/qadam-logo-dark.svg` · `-horizontal-dark.svg` | على الخلفيات الداكنة |
-| `logo/qadam-logo-on-green.svg` | على الأخضر: لافتات، تيشيرتات، أغلفة |
-| `logo/qadam-logo-mono-ink.svg` · `-mono-white.svg` | لون واحد: أختام، حفر، طباعة بلون واحد |
-| `logo/qadam-wordmark-ar.svg` · `qadam-wordmark-en.svg` | الاسم بلغة واحدة |
-| `logo/qadam-icon.svg` · `qadam-app-icon.svg` | صورة البروفايل وأيقونة التطبيق |
-| `logo/qadam-favicon.svg` | أيقونة المتصفح للأحجام الصغيرة جداً |
-| `png/` | نفس النسخ PNG بخلفية شفافة + `qadam-favicon.ico` + أيقونة الآيفون `qadam-app-icon-180.png` |
+| `qadam-logo.svg` | **الشعار الأساسي** أفقي: الأيقونة يمين والاسم شمالها، للافتات والهيدر والفواتير |
+| `qadam-logo-stacked.svg` | عمودي: الأيقونة فوق والاسم تحت، للمساحات المربعة والأكياس والملصقات |
+| `qadam-logo-dark.svg` · `qadam-logo-stacked-dark.svg` | على الخلفيات الداكنة |
+| `qadam-logo-on-green.svg` | على الأخضر: اللافتات، الزي، السيارات |
+| `qadam-logo-mono-ink.svg` · `qadam-logo-mono-white.svg` | لون واحد: الأختام، الحفر، الطباعة بلون واحد |
+| `qadam-mark.svg` | الأيقونة وحدها (الخطوتين) |
+| `qadam-icon.svg` | صورة البروفايل (دائرة خضراء) |
+| `qadam-app-icon.svg` | أيقونة تطبيق (مربع بزوايا مدوّرة) |
+| `qadam-favicon.svg` | أيقونة المتصفح |
+| `qadam-wordmark-ar.svg` · `qadam-wordmark-en.svg` | الاسم وحده بلغة واحدة |
 
-> للطباعة الاحترافية واللوحات الكبيرة استخدم **SVG** دائماً.
+### `png/` — PNG بخلفية شفافة
+كل النسخ بأحجام جاهزة + `qadam-favicon.ico` + `qadam-app-icon-180.png` لأيقونة الآيفون.
+
+> للطباعة الاحترافية واللافتات الكبيرة استخدم **SVG** دائماً.
 
 ---
 
@@ -45,34 +45,29 @@ The single dot of «الخير» (on خ) and of «Alkhair» (on i) is a gold hea
 | اللون | HEX | الاستخدام |
 | --- | --- | --- |
 | Khair Green | `#0A5440` | لون الاسم |
-| Leaf Green | `#0F7B5A` | الخلفيات الخضراء والأيقونات |
-| Khair Gold | `#E3A42B` | **إشارات الخير فقط**: القلب، النور، السنبلة، الحضن |
-| Light Gold | `#F6CB6B` | نفس الإشارات على الخلفيات الداكنة والخضراء |
+| Step Green | `#0F7B5A` | الخطوة الخلفية والخلفيات الخضراء |
+| Khair Gold | `#E3A42B` | الخطوة الأمامية — الخطوة اللي بتجيب الخير |
+| Light Gold | `#F6CB6B` | الخطوة الأمامية على الداكن والأخضر |
 | Ink | `#12241F` | النصوص والخلفية الداكنة |
 | Cream | `#FBF7EF` | الخلفية الفاتحة، والاسم على الداكن |
 
 ## الخط · Typography
 
-الشعار بخط **El Messiri** (عربي ولاتيني)، ومحوَّل إلى مسارات فلا يحتاج تثبيت أي خط.
-للمطبوعات والموقع: **El Messiri** للعناوين، و**IBM Plex Sans Arabic** أو **Tajawal** للنصوص.
-بدائل نفس الفكرة بخطوط أخرى (مدوّر، رقعة، عصري) في `_explorations/typefaces/`.
+الشعار بخط **El Messiri**. للمطبوعات والموقع: El Messiri للعناوين، و**IBM Plex Sans Arabic** أو **Tajawal** للنصوص (كلها مجانية على Google Fonts).
 
 ## قواعد الاستخدام · Usage
 
-- **المساحة الحرة:** فراغ حول الشعار لا يقل عن ارتفاع السطر الإنجليزي.
-- **أصغر مقاس:** الشعار الأساسي 100px عرضاً (25 مم طباعة)، والأفقي 160px (40 مم).
-  أصغر من ذلك استخدم الأيقونة، وتحت 32px الفافيكون.
-- **ممنوع:** إرجاع النقطة العادية مكان القلب، تغيير لون الذهبي، إعادة كتابة الاسم بخط آخر، المدّ أو الإمالة أو الظلال، أو وضع النسخة الخضراء على خلفية داكنة.
+- **المساحة الحرة:** فراغ حول الشعار لا يقل عن ارتفاع السطر الإنجليزي من كل جهة.
+- **أصغر مقاس:** الأفقي 160px عرضاً (40 مم طباعة)، والعمودي 100px (25 مم). أصغر من كده استخدم الأيقونة.
+- **ممنوع:** تغيير ألوان الخطوتين أو عكسهم، فصل الأيقونة عن الاسم في الشعار الأساسي، إعادة كتابة الاسم بخط تاني، المدّ أو الإمالة أو الظلال، أو وضع النسخة الخضراء على خلفية داكنة (استخدم `-dark` أو `-on-green`).
 
 ## الويب · Web
 
-بعد اختيار الخيار (مثلاً `b-wheat`):
-
 ```html
-<img src="brand/qadam-alkhair/options/b-wheat/logo/qadam-logo-horizontal.svg" alt="قدم الخير" height="44">
-<link rel="icon" href="brand/qadam-alkhair/options/b-wheat/logo/qadam-favicon.svg" type="image/svg+xml">
-<link rel="icon" href="brand/qadam-alkhair/options/b-wheat/png/qadam-favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="brand/qadam-alkhair/options/b-wheat/png/qadam-app-icon-180.png">
+<img src="brand/qadam-alkhair/logo/qadam-logo.svg" alt="قدم الخير" height="48">
+<link rel="icon" href="brand/qadam-alkhair/logo/qadam-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="brand/qadam-alkhair/png/qadam-favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="brand/qadam-alkhair/png/qadam-app-icon-180.png">
 ```
 
-افتح `preview.html` لمقارنة كل الخيارات في صفحة واحدة.
+`explorations/` فيها كل الاتجاهات اللي اتجرّبت قبل الوصول للشعار ده.
