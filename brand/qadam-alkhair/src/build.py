@@ -33,7 +33,7 @@ HEART = ("M0,15 C-16,4 -22,-5 -22,-13 C-22,-21 -16,-26 -9,-26 C-4.5,-26 -1,-23 0
          "C1,-23 4.5,-26 9,-26 C16,-26 22,-21 22,-13 C22,-5 16,4 0,15 Z")
 # ink box of the primary mark inside its 200x200 box
 INNER = 0.85        # how much of the counter the hand fills
-MARK_INK = (35.5, 39.5, 165.6, 169.6)
+MARK_INK = (27.0, 27.0, 172.9, 172.9)
 
 
 def _grad(uid, a, b):
@@ -68,69 +68,93 @@ def _open(uid, ring_fill, gradient):
 
 
 # ------------------------------------------------------------ the mark -------
-# The hand is drawn fingers-up in a local box (wrist at 48,78), then tilted so
-# its wrist runs on into the tail of the Q: letter and gesture are one shape.
-WRIST = (126, 128)
-HAND_K = 0.86
-HAND_TILT = -40
-ARM_W = 21
-ARM_OUT = 44
-GAP = 5.5
-HEART_S = 0.85
+# ---------------------------------------------------------- primary mark ---
+# One solid Q. Its counter is an open hand (negative space) holding a heart;
+# the tail cuts into the bowl like a typographic Q. One form, one accent.
+import math as _m
+
+Q_C = (98, 96)            # bowl centre
+Q_R = 66                  # bowl radius
+Q_TAIL = (52, 96, 24)     # tail: from radius, to radius, width
+Q_GAP = 5                 # knockout between the tail and the bowl / hand
+HAND_AT = (97, 98)
+HAND_TILT = -38
+HAND_K = 1.0
+HEART_S = 0.62
+PRIMARY_SHIFT = "translate(-5 -3)"
 A45 = 0.70711
-HAND_T = (f'translate({WRIST[0]} {WRIST[1]}) rotate({HAND_TILT}) scale({HAND_K}) '
-          f'translate(-48 -78)')
-ARM_END = (WRIST[0] + ARM_OUT * A45, WRIST[1] + ARM_OUT * A45)
+
+# hand in a local frame: palm centre at (0,0), fingers up
+_FINGERS = [((-19.5, -15), 30, -8), ((-6.5, -17), 37, -2.5),
+            ((6.5, -16.5), 35, 2.5), ((19.5, -13), 26, 8)]
+_FINGER_W = 12.6
+_THUMB = ((-22, 8), 24, -40)
+_THUMB_W = 13.6
+_PALM = (-26.5, -22, 53, 50, 19)
 
 
-def _cap(x1, y1, x2, y2, w, fill):
-    return (f'<path d="M{x1},{y1} L{x2},{y2}" stroke="{fill}" stroke-width="{w}" '
-            f'stroke-linecap="round" fill="none"/>')
+def _seg(p1, p2, w, fill):
+    return (f'<path d="M{p1[0]:.2f},{p1[1]:.2f} L{p2[0]:.2f},{p2[1]:.2f}" stroke="{fill}" '
+            f'stroke-width="{w}" stroke-linecap="round" fill="none"/>')
 
 
-def _heart_at(scale, fill):
-    return (f'<g transform="translate(48 57) scale({scale})">'
+def _tip(base, length, ang):
+    a = _m.radians(ang)
+    return (base[0] + length * _m.sin(a), base[1] - length * _m.cos(a))
+
+
+def hand_shape(fill="#000"):
+    x, y, w, h, rx = _PALM
+    parts = [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}"/>']
+    parts += [_seg(b, _tip(b, l, a), _FINGER_W, fill) for b, l, a in _FINGERS]
+    b, l, a = _THUMB
+    parts.append(_seg(b, _tip(b, l, a), _THUMB_W, fill))
+    return "".join(parts)
+
+
+def _heart_in_palm(fill, s=HEART_S):
+    return (f'<g transform="translate(0 {3 + 4 * s:.2f}) scale({s})">'
             f'<path d="{HEART}" fill="{fill}"/></g>')
 
 
-def _hand_body(fill):
-    fingers = "".join(_cap(x, 52, x, top, 13, fill) for x, top in
-                      [(26, 16), (41, 6), (56, 11), (71, 24)])
-    palm = f'<rect x="19" y="34" width="59" height="46" rx="20" fill="{fill}"/>'
-    thumb = _cap(26, 56, 6, 44, 13, fill)
-    return fingers + thumb + palm
+def mark(uid, form_fill, heart_fill, gradient=None, hand=True):
+    """Primary mark in a 200x200 box.
 
-
-def mark(uid, ring_fill, hand_fill, arm_fill=None, gradient=None, hand=True):
-    """Primary: an open hand reaching out of the Q with a heart in it.
-
-    The forearm continues as the tail of the Q, so the gesture and the letter
-    are one shape. `hand=False` gives the simplified small-size mark.
+    form_fill  colour of the Q (ignored when `gradient` is given)
+    heart_fill colour of the heart
+    hand=False gives the small-size version: the counter is the heart itself.
     """
-    defs, ring_fill = _open(uid, ring_fill, gradient)
-    arm_fill = arm_fill or ring_fill
-    arm = _cap(WRIST[0], WRIST[1], ARM_END[0], ARM_END[1], ARM_W, arm_fill)
+    defs = []
+    if gradient:
+        defs.append(_grad(uid, *gradient))
+        form_fill = f"url(#g{uid})"
+    cx, cy = Q_C
+    t_in, t_out, t_w = Q_TAIL
+    e0 = (cx + t_in * A45, cy + t_in * A45)
+    e1 = (cx + t_out * A45, cy + t_out * A45)
+    T = f'translate({HAND_AT[0]} {HAND_AT[1]}) rotate({HAND_TILT}) scale({HAND_K})'
     if hand:
-        defs.append(
-            f'<mask id="h{uid}" maskUnits="userSpaceOnUse" x="-60" y="-60" '
-            f'width="320" height="320">'
-            f'<rect x="-60" y="-60" width="320" height="320" fill="#fff"/>'
-            + _heart_at(HEART_S + GAP / 28, "#000") + '</mask>')
-        body = (f'<g transform="{HAND_T}"><g mask="url(#h{uid})">'
-                f'{_hand_body(hand_fill)}</g>{_heart_at(HEART_S, hand_fill)}</g>')
-        knock = (f'<g transform="{HAND_T}" stroke="#000" stroke-width="{GAP / HAND_K:.1f}" '
-                 f'stroke-linecap="round" stroke-linejoin="round">{_hand_body("#000")}</g>')
+        counter = f'<g transform="{T}">{hand_shape("#000")}</g>'
+        guard = (f'<g transform="{T}" stroke="#000" stroke-width="{2 * Q_GAP / HAND_K:.1f}" '
+                 f'stroke-linejoin="round" stroke-linecap="round">{hand_shape("#000")}</g>')
+        inner = f'<g transform="{T}">{_heart_in_palm(heart_fill)}</g>'
     else:
-        body = (f'<g transform="translate(98 102) scale(1.45) translate(-48 -57)">'
-                + _heart_at(1.0, hand_fill) + '</g>')
-        knock = ""
-    knock += _cap(WRIST[0], WRIST[1], ARM_END[0], ARM_END[1], ARM_W + 2 * GAP, "#000")
+        hs = 1.55
+        counter = (f'<g transform="translate({cx} {cy + 4}) scale({hs})">'
+                   f'<path d="{HEART}" fill="#000"/></g>')
+        guard = ""
+        inner = ""
     defs.append(
         f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="-60" y="-60" width="320" height="320">'
-        f'<rect x="-60" y="-60" width="320" height="320" fill="#fff"/>{knock}</mask>')
-    ring = (f'<circle cx="{RING["cx"]}" cy="{RING["cy"]}" r="{RING["r"]}" fill="none" '
-            f'stroke="{ring_fill}" stroke-width="{RING["w"]}" mask="url(#m{uid})"/>')
-    return "\n".join(defs), f'<g transform="{SHIFT}">{ring}{arm}{body}</g>'
+        f'<rect x="-60" y="-60" width="320" height="320" fill="#fff"/>{counter}'
+        + _seg(e0, e1, t_w + 2 * Q_GAP, "#000") + '</mask>')
+    defs.append(
+        f'<mask id="t{uid}" maskUnits="userSpaceOnUse" x="-60" y="-60" width="320" height="320">'
+        f'<rect x="-60" y="-60" width="320" height="320" fill="#fff"/>{guard}</mask>')
+    body = (f'<g transform="{PRIMARY_SHIFT}">'
+            f'<circle cx="{cx}" cy="{cy}" r="{Q_R}" fill="{form_fill}" mask="url(#m{uid})"/>'
+            f'<g mask="url(#t{uid})">{_seg(e0, e1, t_w, form_fill)}</g>{inner}</g>')
+    return "\n".join(defs), body
 
 
 # ------------------------------------------------------- alternate concepts ---
