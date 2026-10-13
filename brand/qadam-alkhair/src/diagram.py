@@ -14,12 +14,13 @@ def to_canvas(x, y):
 
 ITEMS = [
     ((54.0, 68.0),   "حلقة Q · كأس حرف ق", 86),
-    ((84.0, 86.0),   "كفّ مفتوحة تُقدِّم", 176),
-    ((98.0, 119.0),  "قلب في الراحة · الخير", 266),
+    ((99.9, 88.0),   "قلب · الخير الذي يُعطى", 176),
+    ((93.3, 131.0),  "يد تمتدّ وتُعطي", 266),
     ((143.0, 161.0), "ورقة · ذيل Q", 356),
 ]
 
-defs, body = B.mark("d1", None, C["gold"], C["gold"], (C["green_lt"], C["green_dk"]))
+defs, body = B.mark("d1", None, C["gold"], tail_fill=C["green"],
+                    gradient=(C["green_lt"], C["green_dk"]))
 parts = [f'<g transform="translate({MX - MARK_INK[0]*S:.2f} {MY - MARK_INK[1]*S:.2f}) '
          f'scale({S:.5f})">{body}</g>']
 

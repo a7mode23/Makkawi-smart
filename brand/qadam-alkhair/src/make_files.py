@@ -12,9 +12,10 @@ def mark_variant(uid, style):
     style = style[:-6] if small else style
     kw = dict(hand=not small)
     if style == "color":
-        return B.mark(uid, None, C["gold"], gradient=(C["green_lt"], C["green_dk"]), **kw)
+        return B.mark(uid, None, C["gold"], tail_fill=C["green"],
+                      gradient=(C["green_lt"], C["green_dk"]), **kw)
     if style == "on_dark":
-        return B.mark(uid, C["white"], C["gold_lt"], **kw)
+        return B.mark(uid, C["white"], C["gold_lt"], tail_fill=C["white"], **kw)
     if style == "mono_ink":
         return B.mark(uid, C["ink"], C["ink"], **kw)
     if style == "mono_white":

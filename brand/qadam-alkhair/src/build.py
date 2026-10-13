@@ -68,39 +68,53 @@ def _open(uid, ring_fill, gradient):
 
 
 # ------------------------------------------------------------ the mark -------
-def _cap(x1, y1, x2, y2, w, fill):
-    return (f'<path d="M{x1},{y1} L{x2},{y2}" stroke="{fill}" stroke-width="{w}" '
-            f'stroke-linecap="round" fill="none"/>')
+# palm-up hand reaching right, drawn in a local 0..96 box
+HAND_OUTLINE = ("M2,56 L22,53 C34,49 44,45 58,44 C70,43 82,45 91,49 "
+                "C97,52 97,61 91,63 C78,68 50,69 30,69 L2,69 Z")
+HAND_THUMB = "M33,50 C38,38 50,33 58,35 C56,43 46,50 36,53 Z"
+HAND_SLITS = ("M92,49 L78,50", "M94,56 L80,57", "M91,63 L79,63")
+HAND_T = "translate(100 122) rotate(-14) scale(0.84) translate(-48 -46)"
+GIFT_T = "translate(60 12) scale(0.95)"
+GAP = 6.0
 
 
-def mark(uid, ring_fill, hand_fill, heart_fill=None, gradient=None, hand=True):
-    """Primary: an open hand carrying a heart in its palm, inside the Q.
+def mark(uid, ring_fill, hand_fill, tail_fill=None, gradient=None, hand=True):
+    """Primary: a hand reaches out of the Q and hands a heart over.
 
-    The heart is knocked out of the hand, so it reads on any background and in
-    one colour. `hand=False` gives the simplified small-size mark (heart only).
+    The ring and the leaf keep a clean gap around the hand, so the gesture
+    reads on any background and in a single colour.
+    `hand=False` returns the simplified small-size mark (heart only).
     """
     defs, ring_fill = _open(uid, ring_fill, gradient)
-    defs.append(_tail_mask(uid))
-    heart_at = ('<g transform="translate(48 57) scale({s})">'
-                '<path d="' + HEART + '" fill="{f}"/></g>')
+    tail_fill = tail_fill or ring_fill
+    heart = f'<g transform="{GIFT_T}"><path d="{HEART}" fill="{hand_fill}"/></g>'
     if hand:
-        fingers = "".join(_cap(x, 52, x, top, 13, hand_fill) for x, top in
-                          [(26, 16), (41, 6), (56, 11), (71, 24)])
-        palm = f'<rect x="19" y="34" width="59" height="46" rx="20" fill="{hand_fill}"/>'
-        thumb = _cap(26, 56, 6, 44, 13, hand_fill)
         defs.append(
-            f'<mask id="p{uid}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="280" height="280">'
-            f'<rect x="-40" y="-40" width="280" height="280" fill="#fff"/>'
-            + heart_at.format(s=0.70, f="#000") + '</mask>')
-        inner = f'<g mask="url(#p{uid})">{fingers}{thumb}{palm}</g>'
-        if heart_fill:
-            inner += heart_at.format(s=0.58, f=heart_fill)
-        g = (f'<g transform="translate(98 112) rotate(-15) scale(0.70) translate(-48 -46)">'
-             f'{inner}</g>')
+            f'<mask id="s{uid}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="300" height="300">'
+            f'<rect x="-40" y="-40" width="300" height="300" fill="#fff"/>'
+            + "".join(f'<path d="{d}" stroke="#000" stroke-width="3.2" stroke-linecap="round"/>'
+                      for d in HAND_SLITS) + '</mask>')
+        body = (f'<g mask="url(#s{uid})"><path d="{HAND_OUTLINE}" fill="{hand_fill}"/>'
+                f'<path d="{HAND_THUMB}" fill="{hand_fill}"/></g>')
+        knock = (f'<g transform="{HAND_T}" stroke="#000" stroke-width="{GAP / 0.84:.1f}" '
+                 f'stroke-linejoin="round"><path d="{HAND_OUTLINE}" fill="#000"/>'
+                 f'<path d="{HAND_THUMB}" fill="#000"/>'
+                 f'<g transform="{GIFT_T}"><path d="{HEART}" fill="#000"/></g></g>')
+        inner = f'<g transform="{HAND_T}">{body}{heart}</g>'
     else:
-        g = (f'<g transform="translate(98 112) scale(1.25) translate(-48 -57)">'
-             + heart_at.format(s=1.0, f=hand_fill) + '</g>')
-    return "\n".join(defs), f'<g transform="{SHIFT}">{_ring(uid, ring_fill)}{g}{_tail(hand_fill)}</g>'
+        knock = ""
+        inner = (f'<g transform="translate(98 112) scale(1.3) translate(-60 -7)">{heart}</g>')
+    defs.append(
+        f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="300" height="300">'
+        f'<rect x="-40" y="-40" width="300" height="300" fill="#fff"/>'
+        f'<g transform="{LEAF_T}"><path d="{LEAF_D}" fill="#000" stroke="#000" '
+        f'stroke-width="9" stroke-linejoin="round"/></g>{knock}</mask>')
+    defs.append(
+        f'<mask id="t{uid}" maskUnits="userSpaceOnUse" x="-40" y="-40" width="300" height="300">'
+        f'<rect x="-40" y="-40" width="300" height="300" fill="#fff"/>{knock}</mask>')
+    tail = (f'<g mask="url(#t{uid})" transform="{LEAF_T}">'
+            f'<path d="{LEAF_D}" fill="{tail_fill}"/></g>')
+    return "\n".join(defs), f'<g transform="{SHIFT}">{_ring(uid, ring_fill)}{tail}{inner}</g>'
 
 
 # ------------------------------------------------------- alternate concepts ---
