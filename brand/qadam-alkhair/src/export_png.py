@@ -12,7 +12,8 @@ JOBS = [("qadam-mark", [512, 1024]), ("qadam-mark-mono-ink", [512]),
         ("qadam-logo-stacked", [900, 1800]), ("qadam-logo-stacked-dark", [900]),
         ("qadam-wordmark", [1600]), ("qadam-app-icon", [512, 1024]),
         ("qadam-favicon", [16, 32, 48, 64, 180, 512]),
-        ("qadam-alt-heart", [512]), ("qadam-alt-wheat", [512])]
+        ("qadam-alt-heart", [512]), ("qadam-alt-wheat", [512]),
+        ("qadam-alt-hand", [512])]
 
 def viewbox(svg_text):
     m = re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', svg_text)

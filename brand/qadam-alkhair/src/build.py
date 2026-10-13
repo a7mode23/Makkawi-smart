@@ -21,8 +21,9 @@ C = {
 # ---------------------------------------------------------------- the mark ---
 # Built in a 200x200 box. Ring = letter Q / bowl of ق. Leaf = Q tail + growth.
 # Two seeds above = the two dots of ق + "seeds of khair".
-RING = dict(cx=100, cy=102, r=52, w=21)
-LEAF_T = "matrix(0.70711 0.70711 0.70711 -0.70711 124 126)"
+RING = dict(cx=100, cy=116, r=52, w=21)
+LEAF_T = "matrix(0.70711 0.70711 0.70711 -0.70711 124 140)"
+LEAFSHAPE = "M0,0 C11,-4 23,-13 26,-27 C12,-26 2,-16 0,-3 Z"   # leaf, tip up-right
 LEAF_D = ("M58,0 C45,6.4 27,10 6,10 C-4.2,10 -9.5,5.6 -9.5,0 "
           "C-9.5,-5.6 -4.2,-10 6,-10 C27,-10 45,-6.4 58,0 Z")
 SEED_D = ("M0,-13 C4.5,-6.5 8,-3.5 8,1.5 C8,6 4.4,9.5 0,9.5 "
@@ -30,22 +31,28 @@ SEED_D = ("M0,-13 C4.5,-6.5 8,-3.5 8,1.5 C8,6 4.4,9.5 0,9.5 "
 SEED_S = 0.72          # seeds read as the two dots of ق, not as ears
 SEED_X = 12.5          # half the distance between the two dots
 SEED_Y = 30
-MARK_SHIFT = "translate(-3 11)"
+MARK_SHIFT = "translate(-2 0)"
 
 
 def mark(uid, ring_fill, leaf_fill, seed_fill, gradient=None):
-    """Return (defs, body) for the mark, drawn inside a 200x200 user space."""
+    """The mark, in a 200x200 box.
+
+    Ring   = the bowl of Q and of ق.
+    Sprout = two leaves on a stem growing out of the ring; they also sit where
+             the two dots of ق sit, so the letter still reads.
+    Leaf tail = the tail of Q and a leaf at once — the khair cue.
+    """
     defs = []
     if gradient:
         defs.append(
-            f'<linearGradient id="g{uid}" x1="24" y1="34" x2="168" y2="172" '
+            f'<linearGradient id="g{uid}" x1="24" y1="34" x2="168" y2="180" '
             f'gradientUnits="userSpaceOnUse">'
             f'<stop offset="0" stop-color="{gradient[0]}"/>'
             f'<stop offset="1" stop-color="{gradient[1]}"/></linearGradient>')
         ring_fill = f"url(#g{uid})"
-    # mask: notch the ring where the leaf crosses it
+    stem_fill = ring_fill
     defs.append(
-        f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">'
+        f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="240">'
         f'<rect x="-20" y="-20" width="240" height="240" fill="#fff"/>'
         f'<g transform="{LEAF_T}"><path d="{LEAF_D}" fill="#000" stroke="#000" '
         f'stroke-width="9" stroke-linejoin="round"/></g></mask>')
@@ -53,44 +60,84 @@ def mark(uid, ring_fill, leaf_fill, seed_fill, gradient=None):
         f'<g transform="{MARK_SHIFT}">'
         f'<circle cx="{RING["cx"]}" cy="{RING["cy"]}" r="{RING["r"]}" fill="none" '
         f'stroke="{ring_fill}" stroke-width="{RING["w"]}" mask="url(#m{uid})"/>'
+        f'<path d="M100,60 C100,48 100,42 100,34" stroke="{stem_fill}" stroke-width="8.5" '
+        f'stroke-linecap="round" fill="none"/>'
+        f'<g transform="translate(99 38) rotate(4) scale(1.28)">'
+        f'<path d="{LEAFSHAPE}" fill="{leaf_fill}"/></g>'
+        f'<g transform="translate(101 38) rotate(-4) scale(-1.28 1.28)">'
+        f'<path d="{LEAFSHAPE}" fill="{leaf_fill}"/></g>'
         f'<g transform="{LEAF_T}"><path d="{LEAF_D}" fill="{leaf_fill}"/></g>'
-        f'<g transform="translate(84 22) rotate(-14)"><path d="{SEED_D}" fill="{seed_fill}"/></g>'
-        f'<g transform="translate(116 22) rotate(14)"><path d="{SEED_D}" fill="{seed_fill}"/></g>'
         f'</g>')
     return "\n".join(defs), body
 
 
 # ------------------------------------------------------- alternate concepts ---
 def mark_wheat(uid, ring_fill, grain_fill, gradient=None):
-    """Concept C: Q whose tail is a wheat spike (سنبلة)."""
+    """Alternate: a wheat ear rises out of the Q — رزق وخير."""
     defs = []
     if gradient:
         defs.append(
-            f'<linearGradient id="g{uid}" x1="24" y1="34" x2="168" y2="172" '
+            f'<linearGradient id="g{uid}" x1="24" y1="34" x2="168" y2="180" '
             f'gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="{gradient[0]}"/>'
             f'<stop offset="1" stop-color="{gradient[1]}"/></linearGradient>')
         ring_fill = f"url(#g{uid})"
-    grains = []
-    grain = "M0,0 C9,-3.4 19,-2.2 24,0 C19,2.2 9,3.4 0,0 Z"
-    for i, (t, sc) in enumerate([(9, 1.0), (21.5, 0.92), (33, 0.82)]):
-        for sgn in (1, -1):
-            grains.append(
-                f'<g transform="translate({t} {sgn*3.2}) rotate({sgn*26}) scale({sc})">'
+    grain = "M0,0 C9,-5.5 20,-4 25,0 C20,4 9,5.5 0,0 Z"
+    ears = []
+    for y, sc in [(60, 1.0), (47, 0.9), (35, 0.78)]:
+        ears.append(f'<g transform="translate(102 {y}) rotate(-52) scale({sc})">'
+                    f'<path d="{grain}" fill="{grain_fill}"/></g>')
+        ears.append(f'<g transform="translate(98 {y}) rotate(-128) scale({sc})">'
+                    f'<path d="{grain}" fill="{grain_fill}"/></g>')
+    ears.append(f'<g transform="translate(100 28) rotate(-90) scale(0.72)">'
                 f'<path d="{grain}" fill="{grain_fill}"/></g>')
-    grains.append(f'<g transform="translate(43 0) scale(0.74)">'
-                  f'<path d="{grain}" fill="{grain_fill}"/></g>')
-    spike = (f'<g transform="{LEAF_T}">'
-             f'<path d="M-8,0 L26,0" stroke="{grain_fill}" stroke-width="7.5" '
-             f'stroke-linecap="round"/>' + "".join(grains) + '</g>')
     defs.append(
-        f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">'
+        f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="240">'
         f'<rect x="-20" y="-20" width="240" height="240" fill="#fff"/>'
-        f'<g transform="{LEAF_T}"><path d="M-10,0 L70,0" stroke="#000" stroke-width="34" '
-        f'stroke-linecap="round"/></g></mask>')
-    body = (f'<g transform="translate(-6 8)">'
+        f'<g transform="{LEAF_T}"><path d="{LEAF_D}" fill="#000" stroke="#000" '
+        f'stroke-width="9" stroke-linejoin="round"/></g></mask>')
+    body = (f'<g transform="{MARK_SHIFT}">'
             f'<circle cx="{RING["cx"]}" cy="{RING["cy"]}" r="{RING["r"]}" fill="none" '
             f'stroke="{ring_fill}" stroke-width="{RING["w"]}" mask="url(#m{uid})"/>'
-            f'{spike}</g>')
+            f'<path d="M100,66 L100,32" stroke="{ring_fill}" stroke-width="8" '
+            f'stroke-linecap="round"/>{"".join(ears)}'
+            f'<g transform="{LEAF_T}"><path d="{LEAF_D}" fill="{grain_fill}"/></g></g>')
+    return "\n".join(defs), body
+
+
+def mark_hand(uid, ring_fill, hand_fill, leaf_fill, gradient=None):
+    """Alternate: an open hand offering a seedling — قدّم الخير حرفياً."""
+    defs = []
+    if gradient:
+        defs.append(
+            f'<linearGradient id="g{uid}" x1="24" y1="34" x2="168" y2="180" '
+            f'gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="{gradient[0]}"/>'
+            f'<stop offset="1" stop-color="{gradient[1]}"/></linearGradient>')
+        ring_fill = f"url(#g{uid})"
+    fingers = "".join(
+        f'<path d="M{x},{y} L{x},{y-l}" stroke="{hand_fill}" stroke-width="9.5" '
+        f'stroke-linecap="round"/>'
+        for x, y, l in [(80, 130, 18), (91, 130, 25), (102, 130, 25), (113, 130, 18)])
+    palm = (f'<path d="M74,126 C74,144 86,154 100,154 C114,154 126,144 126,126 Z" fill="{hand_fill}"/>'
+            f'<rect x="74" y="118" width="52" height="14" rx="7" fill="{hand_fill}"/>'
+            f'<path d="M74,128 C64,126 60,118 64,112" fill="none" stroke="{hand_fill}" '
+            f'stroke-width="10" stroke-linecap="round"/>')
+    sprout = (f'<path d="M100,118 L100,98" stroke="{leaf_fill}" stroke-width="6" stroke-linecap="round"/>'
+              f'<g transform="translate(99 100) rotate(4) scale(0.8)">'
+              f'<path d="{LEAFSHAPE}" fill="{leaf_fill}"/></g>'
+              f'<g transform="translate(101 100) rotate(-4) scale(-0.8 0.8)">'
+              f'<path d="{LEAFSHAPE}" fill="{leaf_fill}"/></g>')
+    dots = "".join(f'<g transform="translate({100 + s*12.5} 44) rotate({s*10}) scale(0.72)">'
+                   f'<path d="{SEED_D}" fill="{hand_fill}"/></g>' for s in (-1, 1))
+    defs.append(
+        f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="240">'
+        f'<rect x="-20" y="-20" width="240" height="240" fill="#fff"/>'
+        f'<g transform="{LEAF_T}"><path d="{LEAF_D}" fill="#000" stroke="#000" '
+        f'stroke-width="9" stroke-linejoin="round"/></g></mask>')
+    body = (f'<g transform="{MARK_SHIFT}">'
+            f'<circle cx="{RING["cx"]}" cy="{RING["cy"]}" r="{RING["r"]}" fill="none" '
+            f'stroke="{ring_fill}" stroke-width="{RING["w"]}" mask="url(#m{uid})"/>'
+            f'{dots}{palm}{fingers}{sprout}'
+            f'<g transform="{LEAF_T}"><path d="{LEAF_D}" fill="{hand_fill}"/></g></g>')
     return "\n".join(defs), body
 
 
@@ -110,10 +157,10 @@ def mark_heart(uid, disc_fill, tail_fill, gradient=None):
     defs.append(
         f'<mask id="m{uid}" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">'
         f'<rect x="-20" y="-20" width="240" height="240" fill="#fff"/>'
-        f'<g transform="translate(99 99) scale(0.95)"><path d="{heart}" fill="#000"/></g>'
+        f'<g transform="translate(99 113) scale(0.95)"><path d="{heart}" fill="#000"/></g>'
         f'<g transform="{LEAF_T}"><path d="{tail_d}" stroke="#000" stroke-width="30" '
         f'stroke-linecap="round"/></g></mask>')
-    body = (f'<g transform="translate(-4 6)">'
+    body = (f'<g transform="translate(-2 0)">'
             f'<circle cx="{RING["cx"]}" cy="{RING["cy"]}" r="62.5" fill="{disc_fill}" '
             f'mask="url(#m{uid})"/>'
             f'<g transform="{LEAF_T}"><path d="{tail_d}" stroke="{tail_fill}" stroke-width="20" '
@@ -152,4 +199,4 @@ def write(name, content):
 
 
 # ink bounding box of the primary mark inside its 200x200 box
-MARK_INK = (34.5, 31.8, 161.5, 178.0)
+MARK_INK = (35.5, 7.0, 163.0, 178.5)

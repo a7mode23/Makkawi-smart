@@ -57,12 +57,12 @@ def horizontal(uid, style, ar_fill, la_fill, bg=None, rtl=False):
     ar_w = ar["bbox"][2] - ar["bbox"][0]
     la_w = la["bbox"][2] - la["bbox"][0]
     text_w = max(ar_w, la_w)
-    mark_h, gap, pad = 150, 46, 34
+    mark_h, gap, pad = 174, 44, 32
     mark_w = mark_h * (MARK_INK[2] - MARK_INK[0]) / (MARK_INK[3] - MARK_INK[1])
     W = pad + mark_w + gap + text_w + pad
-    H = 230
-    ar_base = 124          # baseline of the Arabic line
-    la_base = 184          # baseline of the Latin line
+    H = 248
+    ar_base = 134          # baseline of the Arabic line
+    la_base = 194          # baseline of the Latin line
     mark_y = (H - mark_h) / 2
     if rtl:
         mx = W - pad - mark_w
@@ -79,12 +79,12 @@ def stacked(uid, style, ar_fill, la_fill, bg=None):
     ar, la = words(80, 21)
     ar_w = ar["bbox"][2] - ar["bbox"][0]
     la_w = la["bbox"][2] - la["bbox"][0]
-    mark_h = 168
+    mark_h = 198
     mark_w = mark_h * (MARK_INK[2] - MARK_INK[0]) / (MARK_INK[3] - MARK_INK[1])
     W = round(max(mark_w, ar_w, la_w) + 90)
-    H = 394
-    defs, g = mark_at(uid, style, (W - mark_w) / 2, 36, mark_h)
-    ar_base, la_base = 300, 354
+    H = 420
+    defs, g = mark_at(uid, style, (W - mark_w) / 2, 30, mark_h)
+    ar_base, la_base = 322, 376
     body = (g
             + put(ar, (W - ar_w) / 2, ar_base, ar_fill)
             + put(la, (W - la_w) / 2, la_base, la_fill))
@@ -104,7 +104,7 @@ def wordmark_only(uid, ar_fill, la_fill, bg=None):
 
 def icon_tile(uid, radius=112, bg=C["green"], style="on_dark"):
     """App icon: rounded square, mark knocked out in white + gold."""
-    defs, g = mark_at(uid, style, 112, 118, 276)
+    defs, g = mark_at(uid, style, 148, 104, 304)
     body = (f'<rect width="512" height="512" rx="{radius}" fill="{bg}"/>' + g)
     extra = (f'<linearGradient id="bg{uid}" x1="0" y1="0" x2="512" y2="512" '
              f'gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="{C["green_lt"]}"/>'
@@ -115,7 +115,7 @@ def icon_tile(uid, radius=112, bg=C["green"], style="on_dark"):
 
 def favicon(uid):
     """Tight-cropped mark for tiny sizes."""
-    pad = 8
+    pad = 5
     s = (64 - 2 * pad) / (MARK_INK[3] - MARK_INK[1])
     defs, body = mark_variant(uid, "color")
     w = (MARK_INK[2] - MARK_INK[0]) * s
@@ -132,6 +132,8 @@ def mark_file(uid, style, bg=None):
 def alt_file(uid, kind, bg=None):
     if kind == "heart":
         defs, body = B.mark_heart(uid, None, C["gold"], (C["green_lt"], C["green_dk"]))
+    elif kind == "hand":
+        defs, body = B.mark_hand(uid, None, C["gold"], C["green_lt"], (C["green_lt"], C["green_dk"]))
     else:
         defs, body = B.mark_wheat(uid, None, C["gold"], (C["green_lt"], C["green_dk"]))
     return svg(200, 200, defs, body, bg)
@@ -155,6 +157,7 @@ FILES = {
     "logo/qadam-favicon.svg":              lambda: favicon("f1"),
     "logo/qadam-alt-heart.svg":            lambda: alt_file("b1", "heart"),
     "logo/qadam-alt-wheat.svg":            lambda: alt_file("c1", "wheat"),
+    "logo/qadam-alt-hand.svg":             lambda: alt_file("d1", "hand"),
 }
 
 if __name__ == "__main__":
