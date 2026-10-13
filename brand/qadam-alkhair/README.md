@@ -38,6 +38,7 @@ The mark reads as `Q` to a Latin eye and as `ق` to an Arabic eye — one shape,
 | `qadam-app-icon.svg` | أيقونة تطبيق 512×512 بخلفية خضراء |
 | `qadam-favicon.svg` | نسخة مقصوصة للأحجام الصغيرة جداً |
 | `qadam-alt-heart.svg` · `qadam-alt-wheat.svg` | مقترحان بديلان (قلب داخل الـQ · سنبلة قمح) |
+| `qadam-concept-diagram.svg` | مخطط يشرح معنى كل عنصر في العلامة (يتبع لون النص تلقائياً) |
 
 ### `png/` — PNG بخلفية شفافة · transparent PNG
 
