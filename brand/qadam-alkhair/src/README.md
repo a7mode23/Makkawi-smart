@@ -1,26 +1,24 @@
 # إعادة توليد الشعار · Regenerating the logo
 
-كل ملفات الشعار مولّدة من هذه السكربتات، فأي تعديل (لون، سماكة، تباعد) يتم هنا
-ثم يُعاد التوليد — بدون برامج تصميم.
+كل الملفات مولّدة من هذه السكربتات: أي تعديل (لون، حجم القلب، المسافات، الخط) يتم في
+`wordmark.py` ثم يُعاد التوليد.
 
 ```bash
 pip install fonttools uharfbuzz
-
-# خط تجول (OFL) — يُستخدم وقت التوليد فقط، ثم يتحوّل النص إلى مسارات
 mkdir -p fonts && cd fonts
-curl -LO https://raw.githubusercontent.com/google/fonts/main/ofl/tajawal/Tajawal-Bold.ttf
-curl -LO https://raw.githubusercontent.com/google/fonts/main/ofl/tajawal/Tajawal-ExtraBold.ttf
+curl -LO "https://raw.githubusercontent.com/google/fonts/main/ofl/elmessiri/ElMessiri%5Bwght%5D.ttf"
+curl -LO "https://raw.githubusercontent.com/google/fonts/main/ofl/baloobhaijaan2/BalooBhaijaan2%5Bwght%5D.ttf"
+curl -LO "https://raw.githubusercontent.com/google/fonts/main/ofl/arefruqaa/ArefRuqaa-Bold.ttf"
+curl -LO "https://raw.githubusercontent.com/google/fonts/main/ofl/readexpro/ReadexPro%5BHEXP%2Cwght%5D.ttf"
+for f in *%5B*; do mv "$f" "$(python3 -c 'import sys,urllib.parse;print(urllib.parse.unquote(sys.argv[1]))' "$f")"; done
 cd ..
 
-OUT=../ python3 make_files.py     # يكتب logo/*.svg
-python3 export_png.py             # يكتب png/*.png  (يحتاج Chromium)
+OUT=out2 python3 wordmark.py   # SVG
+python3 export2.py             # PNG + ICO (يحتاج Chromium)
 ```
 
 | الملف | الدور |
 | --- | --- |
-| `build.py` | هندسة العلامة (الحلقة، الورقة، النقطتان) + الألوان + المقترحات البديلة |
-| `textpath.py` | تشكيل النص العربي (HarfBuzz) وتحويله إلى مسارات SVG |
-| `make_files.py` | تركيب النسخ (أفقي، عمودي، أيقونة، فافيكون…) |
-| `export_png.py` | تصدير PNG بخلفية شفافة عبر Chromium |
-
-الألوان كلها في `build.py` داخل القاموس `C`.
+| `glyphs.py` | تشكيل النص (HarfBuzz) واستخراج كل نقطة كشكل مستقل لتبديلها |
+| `wordmark.py` | الفكرة نفسها: نقطة «الخير» قلب — وكل التكوينات والألوان |
+| `export2.py` | تصدير PNG وICO |
