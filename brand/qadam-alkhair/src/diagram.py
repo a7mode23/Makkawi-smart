@@ -5,17 +5,18 @@ from build import C, MARK_INK
 from textpath import shape_to_path
 
 W, H = 840, 430
-S = 320 / (MARK_INK[3] - MARK_INK[1])          # mark height 320
-MX, MY = 58, 50
+S = 300 / (MARK_INK[3] - MARK_INK[1])          # mark height 300
+MX, MY = 58, 64
 LABEL_RIGHT = W - 40
 
 def to_canvas(x, y):
     return MX + (x - MARK_INK[0]) * S, MY + (y - MARK_INK[1]) * S
 
 ITEMS = [
-    ((116.0, 22.0),  "نبتة تنمو · وهي نقطتا ق", 86),
-    ((35.5, 116.0),  "حلقة Q · كأس حرف ق", 214),
-    ((143.0, 161.0), "ورقة الخير · ذيل Q", 346),
+    ((54.0, 68.0),   "حلقة Q · كأس حرف ق", 86),
+    ((99.0, 98.0),   "قلب · الخير الذي يُقدَّم", 176),
+    ((69.0, 125.0),  "كفّ مفتوح · العطاء", 266),
+    ((143.0, 161.0), "ورقة · ذيل Q", 356),
 ]
 
 defs, body = B.mark("d1", None, C["gold"], C["gold"], (C["green_lt"], C["green_dk"]))

@@ -13,10 +13,11 @@ that doubles as the Arabic **ق**, with a clear "khair" (goodness, growth, givin
 | العنصر | المعنى |
 | --- | --- |
 | **الحلقة** — the ring | حرف `Q` من الاسم اللاتيني، وفي نفس الوقت كأس/حوض حرف `ق` |
-| **النبتة الطالعة من الحلقة** — the seedling | الخير يُزرع فينمو؛ والورقتان تقومان مقام نقطتي حرف `ق` فوق الكأس |
-| **الورقة الذهبية** — the gold leaf | ذيل حرف `Q` وورقة في آن واحد، والذهبي لون القمح والرزق |
+| **الكفّ المفتوح** — the open hand | العطاء: كفٌّ تُقدِّم لا تأخذ — وهو فعل الاسم نفسه «قدِّم» |
+| **القلب** — the heart | الخير الذي يُقدَّم، محمولاً على الكفّ |
+| **الورقة الذهبية** — the gold leaf | ذيل حرف `Q`، والذهبي لون القمح والرزق |
 
-العلامة كلها رسالة واحدة: **كأس يُقدَّم، ومنه ينبت الخير.**
+العلامة كلها جملة واحدة: **كفٌّ تُقدِّم الخير.**
 
 فالعلامة تُقرأ `Q` للعين اللاتينية و`ق` للعين العربية، بشكل واحد لا يتغيّر.
 The mark reads as `Q` to a Latin eye and as `ق` to an Arabic eye — one shape, two readings.
@@ -39,9 +40,10 @@ The mark reads as `Q` to a Latin eye and as `ق` to an Arabic eye — one shape,
 | `qadam-mark-mono-ink / -mono-white / -mono-green / -on-dark` | نسخ العلامة بلون واحد |
 | `qadam-app-icon.svg` | أيقونة تطبيق 512×512 بخلفية خضراء |
 | `qadam-favicon.svg` | نسخة مقصوصة للأحجام الصغيرة جداً |
-| `qadam-alt-wheat.svg` | بديل: سنبلة قمح تطلع من الـQ |
-| `qadam-alt-hand.svg` | بديل: كفّ مفتوح يقدّم شتلة — «قدّم الخير» حرفياً |
-| `qadam-alt-heart.svg` | بديل: قلب داخل الـQ |
+| `qadam-alt-wheat.svg` | بديل: سنبلة قمح بدل الذيل — رزق وخير |
+| `qadam-alt-word.svg` | بديل: كلمة «خير» داخل الحلقة |
+| `qadam-alt-sprout.svg` | بديل: نبتة تطلع من الحلقة |
+| `qadam-alt-heart.svg` | بديل: قلب يملأ جوف الحرف |
 
 ### `png/` — PNG بخلفية شفافة · transparent PNG
 
