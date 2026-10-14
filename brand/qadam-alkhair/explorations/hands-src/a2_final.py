@@ -4,10 +4,11 @@ import os
 import kit as K, lock3 as L, a2, measure as M
 from shot import shot
 
-OUT = "a2out"
+import sys
+OUT = sys.argv[1] if len(sys.argv) > 1 else "a2out"
 os.makedirs(OUT, exist_ok=True)
 C = K.C
-BASE = dict(rot=-6, heart_at=(97, 105), heart_s=0.9, wrist="cuff", style="tint")
+BASE = dict(rot=-6, heart_at=(97, 105), heart_s=0.9, wrist="cuff", style="tint", sparkles="pair")
 LIGHT = dict(BASE)
 DARK = dict(BASE, green=C["cream"], gold=C["gold_lt"], tint="#1F3B32", bg=C["ink"])
 ONGREEN = dict(BASE, green="#FFFFFF", gold=C["gold_lt"], tint="#2A8C69", bg=C["step"])

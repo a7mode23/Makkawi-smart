@@ -50,13 +50,22 @@ def sparkle(x, y, r, fill):
             f'C{x - k},{y - k} {x - k},{y - k} {x},{y - r}Z" fill="{fill}"/>')
 
 
-def icon(green=GREEN, gold=GOLD, wrist="box", bg="#FFFFFF", sw=40, rot=0, sparkles=True, style="line",
+SPARKS = {
+    "diag":  [(-25, -13, 7.5), (25, 15, 5.2)],                     # what was sent
+    "pair":  [(-28, -5, 6.4), (28, -5, 6.4)],                      # level pair, same size
+    "trio":  [(-28, -2, 6.0), (0, -34, 4.6), (28, -2, 6.0)],       # left, above, right
+    "cluster": [(-27, -16, 7.0), (-36, -2, 3.8), (-17, -29, 3.6)],  # one sparkle-group, upper left
+    "sym":   [(-26, -11, 6.0), (26, 11, 6.0)],                     # diagonal, same size
+}
+
+
+def icon(green=GREEN, gold=GOLD, wrist="box", bg="#FFFFFF", sw=40, rot=0, sparkles="diag", style="line",
          tint="#E3F1EA", giver=None, heart_at=(100, 98), heart_s=0.78):
     kw = dict(sw=sw, wrist=wrist, bg=bg, style=style, tint=tint)
     top = place("palmDownHand", 64, 18, 124, giver or green, mirror=True, rot=rot, **kw)
     bot = place("palmUpHand", 12, 108, 124, green, **kw)
     hx, hy = heart_at
     g = top + bot + H.heart(hx, hy, heart_s, gold)
-    if sparkles:
-        g += sparkle(hx - 25, hy - 13, 7.5, gold) + sparkle(hx + 25, hy + 15, 5.2, gold)
+    for dx, dy, r in SPARKS.get(sparkles or "", []):
+        g += sparkle(hx + dx, hy + dy, r, gold)
     return g
