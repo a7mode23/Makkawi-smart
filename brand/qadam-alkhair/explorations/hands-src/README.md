@@ -14,4 +14,5 @@ The hands are the Noto Emoji glyphs `palmDownHand` / `palmUpHand`
 | `a3.py` | round 3: the dot of «خ» as a heart, darker giving hand, the lockups |
 | `a3b.py`, `clear.py` | round 3 fixed: the hands move apart and the light, heart and sparkles sit in the largest circle that clears both hands |
 | `c2.py` | option ج developed: one hand offering a glowing heart, the light kept clear of the hand |
-| `opt_a.py`, `a2_final.py`, `a3_final.py`, `opt_c.py`, `c2_final.py` | the exported sets |
+| `c3.py` | ج round 2: finer finger lines in a bold outline, a filled sleeve, a shine on the heart |
+| `opt_a.py`, `a2_final.py`, `a3_final.py`, `opt_c.py`, `c2_final.py`, `c3_final.py` | the exported sets |

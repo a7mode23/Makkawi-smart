@@ -12,7 +12,7 @@ WRIST = {"palmDownHand": (250, 678, 1348), "palmUpHand": (205, 50, 807)}      # 
 
 
 def place(name, x, y, w, fill, mirror=False, rot=0, sw=0, wrist="box", bg="#FFFFFF", style="line",
-          tint="#E3F1EA"):
+          tint="#E3F1EA", sw_lines=None, sleeve=None):
     """Like hands3.place, plus a stroke `sw` (font units), a wrist treatment
     (box = as drawn, cuff = outlined shirt cuff, solid = filled cuff) and a style:
     line = outline only, tint = outline over a light fill, solid = filled hand with white finger lines."""
@@ -29,16 +29,22 @@ def place(name, x, y, w, fill, mirror=False, rot=0, sw=0, wrist="box", bg="#FFFF
         body = (f'<path d="{SIL[name]}" fill="{fill}"{st}/>'
                 f'<path d="{fl}" fill="{bg}" stroke="{bg}" stroke-width="{sw * 0.5:.0f}" stroke-linejoin="round"/>')
     else:
-        body = f'<path d="{d}" fill="{fill}"{st}/>'
+        if sw_lines is None:
+            body = f'<path d="{d}" fill="{fill}"{st}/>'
+        else:                                       # bold outline, finer finger lines
+            n = LINES[name].start
+            outline, fl = "".join(parts[:n]), "".join(parts[n:])
+            body = (f'<path d="{outline}" fill="{fill}"{st}/>'
+                    f'<path d="{fl}" fill="{fill}" stroke="{fill}" stroke-width="{sw_lines}" stroke-linejoin="round"/>')
         if style == "tint":
             body = f'<path d="{SIL[name]}" fill="{tint}"/>' + body
     wx, wb, wt = WRIST[name]
     if wrist in ("cuff", "solid"):
         cx0, cx1 = wx - 200, wx + 120 + t * 0.6
         cy0, cy1 = wb - 90, wt + 90
-        f = {"cuff": tint if style == "tint" else bg, "solid": fill}[wrist]
+        f = sleeve or {"cuff": tint if style == "tint" else bg, "solid": fill}[wrist]
         body += (f'<rect x="{cx0:.0f}" y="{cy0:.0f}" width="{cx1 - cx0:.0f}" height="{cy1 - cy0:.0f}" rx="110" '
-                 f'fill="{f}" stroke="{fill}" stroke-width="{t:.0f}"/>')
+                 f'fill="{f}" stroke="{sleeve or fill}" stroke-width="{t:.0f}"/>')
     return (f'<g transform="translate({cx:.2f} {cy:.2f}) rotate({rot}) scale({m * s:.5f} {s:.5f}) '
             f'translate({-(x0 + x1) / 2:.2f} {-(y0 + y1) / 2:.2f}) scale(1 -1)">{body}</g>')
 
