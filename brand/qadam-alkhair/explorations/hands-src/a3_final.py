@@ -1,24 +1,25 @@
 # -*- coding: utf-8 -*-
 """Option أ, third round — export the set and a one-page sheet."""
 import os, sys
-import kit as K, lock3 as L, a3, measure as M
+import kit as K, lock3 as L, a3, a3b, measure as M
 from shot import shot
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else "a3out"
 os.makedirs(OUT, exist_ok=True)
 C = K.C
-LIGHT = dict(giver=C["green"])
-DARK = dict(green=C["cream"], gold=C["gold_lt"], tint="#1F3B32", bg=C["ink"], giver="#FFFFFF",
-            glow=((38, C["gold_lt"], 0.10), (27, C["gold_lt"], 0.20)))
-ONGREEN = dict(green="#FFFFFF", gold=C["gold_lt"], tint="#2A8C69", bg=C["step"],
-               glow=((38, "#FFFFFF", 0.08), (27, C["gold_lt"], 0.22)))
+SHAPE = dict(spread=10, heart_s=0.86, spark_r=5)
+LIGHT = dict(SHAPE, giver=C["green"])
+DARK = dict(SHAPE, green=C["cream"], gold=C["gold_lt"], tint="#1F3B32", bg=C["ink"], giver="#FFFFFF",
+            glow=(C["gold_lt"], C["gold_lt"]), glow_op=(0.10, 0.20))
+ONGREEN = dict(SHAPE, green="#FFFFFF", gold=C["gold_lt"], tint="#2A8C69", bg=C["step"],
+               glow=("#FFFFFF", C["gold_lt"]), glow_op=(0.08, 0.22))
 
 
 def fn(kw):
-    return lambda **_: a3.icon(**kw)
+    return lambda **_: a3b.icon(**kw)[0]
 
 
-BB = {k: M.ink_box(a3.icon(**v)) for k, v in (("light", LIGHT), ("dark", DARK), ("green", ONGREEN))}
+BB = {k: M.ink_box(fn(v)()) for k, v in (("light", LIGHT), ("dark", DARK), ("green", ONGREEN))}
 files = {
     "qadam-logo": (a3.horizontal(fn(LIGHT), BB["light"], bg="#FFFFFF"), 2400),
     "qadam-logo-stacked": (a3.stacked(fn(LIGHT), BB["light"], bg="#FFFFFF"), 1600),
