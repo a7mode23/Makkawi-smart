@@ -7,7 +7,7 @@ from shot import shot
 OUT = sys.argv[1] if len(sys.argv) > 1 else "c2out"
 os.makedirs(OUT, exist_ok=True)
 C = K.C
-SHAPE = dict(rot=-9, heart=(84, 64))
+SHAPE = dict(rot=-14, heart=(70, 74), heart_s=0.86, band=10, spark_r=5)
 LIGHT = dict(SHAPE)
 DARK = dict(SHAPE, green=C["cream"], gold=C["gold_lt"], tint="#1F3B32", bg=C["ink"],
             glow=(C["gold_lt"], C["gold_lt"]), glow_op=(0.12, 0.26))
