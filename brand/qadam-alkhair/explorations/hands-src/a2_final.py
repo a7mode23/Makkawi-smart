@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""Option أ, developed — export the set and a one-page sheet."""
+import os
+import kit as K, lock3 as L, a2, measure as M
+from shot import shot
+
+OUT = "a2out"
+os.makedirs(OUT, exist_ok=True)
+C = K.C
+BASE = dict(rot=-6, heart_at=(97, 105), heart_s=0.9, wrist="cuff", style="tint")
+LIGHT = dict(BASE)
+DARK = dict(BASE, green=C["cream"], gold=C["gold_lt"], tint="#1F3B32", bg=C["ink"])
+ONGREEN = dict(BASE, green="#FFFFFF", gold=C["gold_lt"], tint="#2A8C69", bg=C["step"])
+
+
+def fn(kw):
+    return lambda **_: a2.icon(**kw)
+
+
+BB = {k: M.ink_box(a2.icon(**v)) for k, v in (("light", LIGHT), ("dark", DARK), ("green", ONGREEN))}
+files = {
+    "qadam-logo": (L.horizontal(fn(LIGHT), BB["light"], bg="#FFFFFF", H=240, pad=40), 2400),
+    "qadam-logo-stacked": (L.stacked(fn(LIGHT), BB["light"], bg="#FFFFFF"), 1600),
+    "qadam-logo-dark": (L.horizontal(fn(DARK), BB["dark"], name=C["cream"], bg=C["ink"], H=240, pad=40), 2400),
+    "qadam-icon": (L.badge(fn(ONGREEN), BB["green"], C["step"], cap=0.76), 1024),
+    "qadam-app-icon": (L.badge(fn(ONGREEN), BB["green"], C["step"], shape="square", S=512, cap=0.76), 1024),
+}
+for name, (svg, w) in files.items():
+    open(f"{OUT}/{name}.svg", "w", encoding="utf-8").write(svg)
+    shot(svg, w, f"{OUT}/{name}.png")
+
+# one sheet for the phone
+sheet = f"""<html><head><meta charset=utf-8><style>
+body{{margin:0;background:#FBF7EF;padding:28px;width:1144px;display:grid;gap:22px}}
+.card{{background:#fff;border-radius:22px;padding:22px 30px;display:flex;align-items:center;justify-content:center}}
+.dark{{background:{C["ink"]}}} .row{{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:22px}}
+img{{width:100%;display:block}} .ic img{{width:80%}}
+</style></head><body>
+<div class=card><img src="qadam-logo.png"></div>
+<div class=row><div class=card><img src="qadam-logo-stacked.png"></div>
+<div class="card ic"><img src="qadam-icon.png"></div><div class="card ic"><img src="qadam-app-icon.png"></div></div>
+<div class="card dark"><img src="qadam-logo-dark.png"></div>
+</body></html>"""
+open(f"{OUT}/sheet.html", "w", encoding="utf-8").write(sheet)
