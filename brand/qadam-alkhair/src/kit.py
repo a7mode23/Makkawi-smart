@@ -21,7 +21,7 @@ C = {
     "cream": "#FBF7EF",
     "white": "#FFFFFF",
 }
-ICON_BBOX = (33.66, 17.98, 165.62, 186.56)      # measured in the browser (getBBox)
+ICON_BBOX = (26.97, 10.13, 171.51, 190.63)      # measured in the browser (getBBox)
 
 
 def icon(x, y, h, back, lead):
@@ -29,7 +29,7 @@ def icon(x, y, h, back, lead):
     x0, y0, x1, y1 = ICON_BBOX
     s = h / (y1 - y0)
     g = (f'<g transform="translate({x - x0 * s:.2f} {y - y0 * s:.2f}) scale({s:.4f})">'
-         f'{F.steps_left(back, lead)}</g>')
+         f'{F.pair(back, lead)}</g>')
     return g, (x1 - x0) * s
 
 
