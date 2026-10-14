@@ -1,6 +1,6 @@
 # اليدين — مسودة العمل · Two hands, work in progress
 
-Source for `two-hands-a.png`, `two-hands-a-developed.png` and `two-hands-a-round3.png`. It runs from the
+Source for `two-hands-a*.png` and `one-hand-c*.png`. It runs from the
 scratch folder next to `src/` (it imports `kit.py` and `glyphs.py` from there).
 The hands are the Noto Emoji glyphs `palmDownHand` / `palmUpHand`
 (SIL OFL 1.1, `ofl/notoemoji/NotoEmoji[wght].ttf` in google/fonts).
@@ -13,4 +13,5 @@ The hands are the Noto Emoji glyphs `palmDownHand` / `palmUpHand`
 | `lock3.py`, `measure.py`, `shot.py` | lockups, ink-box measuring, PNG export |
 | `a3.py` | round 3: the dot of «خ» as a heart, darker giving hand, the lockups |
 | `a3b.py`, `clear.py` | round 3 fixed: the hands move apart and the light, heart and sparkles sit in the largest circle that clears both hands |
-| `opt_a.py`, `a2_final.py`, `a3_final.py` | the exported sets |
+| `c2.py` | option ج developed: one hand offering a glowing heart, the light kept clear of the hand |
+| `opt_a.py`, `a2_final.py`, `a3_final.py`, `opt_c.py`, `c2_final.py` | the exported sets |

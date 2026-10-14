@@ -53,3 +53,11 @@ def best_circle(spread=0.0, lift=0.0, lo=-40, size=280, near=(97, 100), search=2
 if __name__ == "__main__":
     for spread in (0, 4, 8, 12):
         print(spread, [round(v, 1) for v in best_circle(spread)])
+
+
+def min_dist(markup, center, lo=-40, size=280):
+    """Distance from `center` to the nearest inked pixel of `markup` (drawn in black)."""
+    m = mask(markup, lo, size)
+    ys, xs = np.nonzero(m)
+    pts = np.stack([lo + xs / PX, lo + ys / PX], 1)
+    return float(np.sqrt(((pts - np.array(center)) ** 2).sum(1)).min())
